@@ -2,17 +2,19 @@ import Link from "next/link";
 import RemoveBtn from "./RemoveBtn";
 import { HiPencilAlt } from "react-icons/hi";
 
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+
 const getTopics = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/topics", {
-      cache: "no-store",
-    });
+    const res = await fetch("http://localhost:3000/api/topics");
 
     if (!res.ok) {
       throw new Error("Failed to fetch topics");
     }
 
-    return res.json();
+    const data = res.json();
+    return data;
   } catch (error) {
     console.log("Error loading topics: ", error);
   }
@@ -20,14 +22,14 @@ const getTopics = async () => {
 
 export default async function TopicsList() {
   const { topics } = await getTopics();
-  // {if (!topics || topics.length === 0) {
-  //   return (
-  //     <div className="p-4 border border-slate-300 my-3 flex justify-between gap-5 items-start">
-  //       No data is here to show
-  //     </div>
-  //   );
-  // }}
-  //console.log(topics);
+  if (!topics || topics.length === 0) {
+    return (
+      <div className="p-4 border border-slate-300 my-3 flex justify-between gap-5 items-start">
+        No data is here to show
+      </div>
+    );
+  }
+  console.log(topics);
 
   return (
     <>
